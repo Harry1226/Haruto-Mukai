@@ -1,0 +1,124 @@
+float base1 = 30;
+float base2 = 20;
+float jointH = 40;
+float arm1H = 40;
+float arm3H = 10;
+float wristH = 20;
+float hand = 10;
+
+float L2 = arm1H;
+float L1 = base2 + jointH;
+float L3 = arm3H + wristH + hand;
+
+float θ1;
+float θ2;
+float θ3;
+
+float px = 10;
+float py = 20;
+float pz = 50;
+
+float rv = 0.05;
+float arm2v = 1.0;
+
+
+void setup(){
+   size(1200, 800, P3D);
+   frameRate(60);
+    camera(100, 200, 100, 0, 0, 0, 0, 0, -1);
+}
+
+void draw(){  
+   background(32);
+     
+   smooth();
+   lights();
+   
+   if(keyPressed){
+      
+    if(key == 'a'){
+      θ1 += rv;
+    }
+    if(key == 's'){
+      θ1 -= rv;
+    }
+    if(key == 'm'){
+      θ2 += rv;
+    }
+    if(key == 'n'){
+      θ2 -= rv;
+    }
+    if(key == 'j'){
+      θ3 += rv;
+    }
+    if(key == 'h'){
+      θ3 -= rv;
+    }
+    
+    if(key == 'Q'){
+      θ1 = 0;
+      θ2 = 0;
+      θ3 = 0;
+      arm3H = 10;
+    }
+   }
+   
+   box(base1, base1, 10);
+   rotateZ(θ1);
+   
+   fill(#696969);
+   noStroke();
+   
+   translate(0, 0 ,base1/2); 
+   box(base2);
+   
+   translate(0, 0, base2/4);
+   fill(#ff0000);
+   noStroke();
+   translate(0, 0, jointH/2);
+   box(10, 10, jointH);
+   fill(#696969);
+   box(11, 11, 5);
+   
+   fill(#ff0000);
+   translate(0, 0, jointH/2);
+   rotateX(θ2);
+   translate(0, 0, arm1H/2);
+   box(8, 8, arm1H);
+   box(9, 9, 3);
+   
+   translate(0, 0, arm3H+5);
+   rotateX(θ3);
+   fill(#696969);
+   noStroke();
+   translate(0, 0, arm3H/2);
+   box(9, 9, arm3H);
+   
+   fill(#ff0000);
+   noStroke();
+   translate(0, 0, wristH/2);
+   box(6, 6, wristH);
+   
+   translate(0, 0, wristH/2);
+   fill(#696969);
+   noStroke();
+
+   box(5, 5, hand);
+   
+   translate(0, 0, hand);
+   box(2, 2, 10);
+   box(2, 2, -10);
+   
+    float S3 = sin(θ3);
+    float C3 = cos(θ3);
+    float V = sqrt(1-C3*C3);
+    float B = +-sqrt(px*px+py*py);
+    float A = L2 + L3*C3;
+    float C = L3*S3;
+    float D = pz - L1;
+      
+      θ1 = atan2(py, px);
+      θ2 = atan2(A*B-C*D, B*C+A*D);
+      θ3 = atan2(+-V, C3);
+     
+}
